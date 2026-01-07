@@ -1,35 +1,32 @@
-# gerar_graficos.py — gera gráficos de latência média por dispositivo
-import os
+# gerar_graficos.py – Geração de gráficos para análise experimental
 import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 
-BASE_DADOS = "repositorio-github/Dados"
-BASE_GRAFICOS = "repositorio-github/Gráficos"
+# Caminhos
+BASE_DIR = Path(__file__).resolve().parent
+DATA_FILE = BASE_DIR / 'Dados' / 'resultados_rpi4.csv'
+OUTPUT_DIR = BASE_DIR / 'Graficos'
+OUTPUT_DIR.mkdir(exist_ok=True)
 
-MAP = {
-    "rpi4": "resultados_rpi4.csv",
-    "i7": "resultados_i7.csv",
-    "galaxy": "resultados_galaxy.csv",
-}
+# Ler dados
+df = pd.read_csv(DATA_FILE)
 
-os.makedirs(BASE_GRAFICOS, exist_ok=True)
+# Agregação
+df_group = df.groupby('algoritmo')['tempo_ms'].mean()
 
-for dev, fname in MAP.items():
-    path = os.path.join(BASE_DADOS, fname)
-    df = pd.read_csv(path)
+# Gráfico
+plt.figure(figsize=(10, 6))
+df_group.plot(kind='bar')
+plt.title('Latência Média – Raspberry Pi 4')
+plt.ylabel('Tempo (ms)')
+plt.xlabel('Algoritmo')
+plt.xticks(rotation=45, ha='right')
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
 
-    g = df.groupby("algoritmo")["tempo_ms"].mean().sort_values(ascending=True)
+# Guardar
+plt.savefig(OUTPUT_DIR / 'grafico_latencia.png', dpi=300)
+plt.close()
 
-    plt.figure(figsize=(10, 6))
-    g.plot(kind="bar")
-    plt.title(f"Latência média por algoritmo — {dev}")
-    plt.ylabel("Tempo (ms)")
-    plt.xlabel("Algoritmo")
-    plt.xticks(rotation=30, ha="right")
-    plt.tight_layout()
-
-    out = os.path.join(BASE_GRAFICOS, f"grafico_latencia_{dev}.png")
-    plt.savefig(out, dpi=300, bbox_inches="tight")
-    plt.close()
-
-print("Gráficos gerados com sucesso.")
+print("Gráfico gerado com sucesso.")
