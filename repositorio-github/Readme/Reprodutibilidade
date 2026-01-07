@@ -1,0 +1,5 @@
+## Reprodutibilidade
+
+Todos os resultados apresentados no artigo IEEE podem ser reproduzidos
+através dos scripts disponíveis neste repositório, utilizando os datasets
+CSV incluídos e o script `gerar_graficos.py`.
