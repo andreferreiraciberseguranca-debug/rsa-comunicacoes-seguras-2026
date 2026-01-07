@@ -1,0 +1,5 @@
+## Nota metodológica
+
+Os tempos medidos incluem geração de chaves como cenário de pior caso.
+Em ambientes reais, chaves de longo prazo seriam pré-provisionadas,
+reduzindo significativamente a latência operacional.
