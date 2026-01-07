@@ -1,3 +1,4 @@
+# Nota: AES-GCM excluído para isolar custo ECC assimétrico
 # ecc_x25519_ed25519.py - ECC alternativa ao RSA
 from cryptography.hazmat.primitives.asymmetric import x25519, ed25519
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -26,4 +27,5 @@ def medir_ecc(iteracoes=1000):
 
 if __name__ == "__main__":
     media, desvio = medir_ecc(1000)
+
     print(f"ECC (X25519+Ed25519): {media:.2f} ± {desvio:.2f} ms")
